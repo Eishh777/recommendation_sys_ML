@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        /* Coffee, Teal, and Yellow Aesthetic (Dusty Tones) */
+        :root {
+            --coffee: #6F4E37;
+            --dusty-teal: #5E7A7D;
+            --muted-yellow: #E3B448;
+            --dark-coffee: #4B382A;
+            --deep-teal: #3A5A5F;
+        }
+        
+        body {
+            background-color: var(--coffee);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            background-color: var(--dusty-teal);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            margin: auto;
+            text-align: center;
+        }
+        
+        h2 {
+            color: var(--muted-yellow);
+            text-align: center;
+        }
+        
+        h4 {
+            color: var(--muted-yellow);
+        }
+        
+        .table {
+            background-color: var(--dark-coffee) !important;
+            color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .table th {
+            background-color: var(--muted-yellow) !important;
+            color: var(--dark-coffee) !important;
+        }
+        
+        .table td {
+            background-color: var(--deep-teal) !important;
+        }
+        
+        button, .btn {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        /* Make buttons pop */
+        .btn-success {
+            background-color: var(--muted-yellow) !important;
+            border: none;
+            color: var(--dark-coffee) !important;
+        }
+        .btn-success:hover {
+            background-color: var(--dark-coffee) !important;
+            color: var(--muted-yellow) !important;
+        }
+        
+        .btn-secondary {
+            background-color: var(--deep-teal) !important;
+            color: white !important;
+        }
+        .btn-secondary:hover {
+            background-color: var(--muted-yellow) !important;
+            color: var(--dark-coffee) !important;
+        }
+        
+        a {
+            color: var(--muted-yellow) !important;
+            text-decoration: none;
+            transition: color 0.3s, transform 0.2s;
+        }
+        
+        a:hover {
+            color: var(--dark-coffee) !important;
+            text-decoration: underline;
+            transform: scale(1.05);
+        }
+        </style>
+        
+</head>
+<body>
+    <div class="container">
+        <h2 class="my-4">Payment Page</h2>
+        <p class="text-end">Welcome, {{ user_name }}!</p>
+        
+        {% if cart_items %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Medicine Name</th>
+                    <th>Price ($)</th>
+                    <th>Quantity</th>
+                    <th>Total ($)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set total_amount = 0 %}
+                {% for item in cart_items %}
+                <tr>
+                    <td>{{ item[1] }}</td>
+                    <td>${{ item[2] }}</td>
+                    <td>{{ item[3] }}</td>
+                    <td>${{ item[2] * item[3] }}</td>
+                </tr>
+                {% set total_amount = total_amount + (item[2] * item[3]) %}
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        
+
+        <form action="{{ url_for('process_payment') }}" method="POST" class="text-center">
+            <button type="submit" class="btn btn-success">Confirm Payment</button>
+        </form>
+        {% else %}
+        <p>Your cart is empty. <a href="{{ url_for('index') }}">Shop Now</a></p>
+        {% endif %}
+
+        <a href="{{ url_for('show_cart') }}" class="btn btn-secondary mt-3">Back to Cart</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        /* Coffee, Teal, and Yellow Aesthetic (Dusty Tones) */
+        :root {
+            --coffee: #6F4E37;
+            --dusty-teal: #5E7A7D;
+            --muted-yellow: #E3B448;
+            --dark-coffee: #4B382A;
+            --deep-teal: #3A5A5F;
+        }
+        
+        body {
+            background-color: var(--coffee);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        
+        .navbar {
+            background-color: var(--dusty-teal) !important;
+            border-bottom: 3px solid var(--muted-yellow);
+            padding: 10px;
+        }
+        
+        .navbar-brand, .nav-link {
+            color: white !important;
+            transition: color 0.3s ease, transform 0.2s;
+        }
+        
+        .nav-link:hover {
+            color: var(--muted-yellow) !important;
+            transform: scale(1.05);
+        }
+        
+        .navbar-toggler {
+            border: 2px solid var(--muted-yellow) !important;
+        }
+        
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-text {
+            color: white !important;
+            margin-left: auto;
+        }
+        
+        button, .btn {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        /* Make clickable elements pop */
+        .btn-primary {
+            background-color: var(--muted-yellow) !important;
+            border: none;
+            color: var(--dark-coffee) !important;
+        }
+        .btn-primary:hover {
+            background-color: var(--dark-coffee) !important;
+            color: var(--muted-yellow) !important;
+        }
+        
+        .btn-warning {
+            background-color: var(--dark-coffee) !important;
+            color: white !important;
+        }
+        .btn-warning:hover {
+            background-color: var(--deep-teal) !important;
+        }
+        
+        .btn-info {
+            background-color: var(--dusty-teal) !important;
+            color: white !important;
+        }
+        .btn-info:hover {
+            background-color: var(--muted-yellow) !important;
+            color: var(--dark-coffee) !important;
+        }
+        
+        .btn-danger {
+            background-color: var(--deep-teal) !important;
+        }
+        .btn-danger:hover {
+            background-color: var(--dark-coffee) !important;
+        }
+        
+        .table {
+            background-color: var(--dusty-teal) !important;
+            color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .table th {
+            background-color: var(--dark-coffee) !important;
+            color: white;
+        }
+        
+        .card {
+            background-color: var(--dusty-teal) !important;
+            border: none;
+            color: white;
+            border-radius: 12px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .alert-secondary {
+            background-color: var(--dark-coffee) !important;
+            color: white !important;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        a {
+            color: var(--muted-yellow) !important;
+            text-decoration: none;
+            transition: color 0.3s, transform 0.2s;
+        }
+        
+        a:hover {
+            color: var(--dark-coffee) !important;
+            text-decoration: underline;
+            transform: scale(1.05);
+        }
+        </style>
+        
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">MedEase</a>  <!-- Website Name -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('buy_medicine', disease='all') }}">Medicine</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Lab Test</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('doctor_consultant') }}">Doctor Consult</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Healthcare</a>
+                        </li>
+                        
+                    </ul>
+                    <span class="navbar-text me-3">Welcome, {{ user_name }}!</span>
+                </div>
+            </div>
+        </nav>
+        <h2 class="my-4">Your Cart</h2>
+
+        {% if cart_items %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Medicine Name</th>
+                    <th>Price ($)</th>
+                    <th>Quantity</th>
+                    <th>Total ($)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td>{{ item[1] }}</td>
+                    <td>{{ item[2] }}</td>
+                    <td>{{ item[3] }} Rupees</td>
+                    
+                    <td>{{ item[2] * item[3] }} Rupees</td>
+                    <td>
+                        <form action="{{ url_for('update_cart') }}" method="POST" class="d-inline">
+                            <input type="hidden" name="medicine_id" value="{{ item[0] }}">
+                            <button type="submit" name="action" value="increase" class="btn btn-sm btn-success">+</button>
+                            <button type="submit" name="action" value="decrease" class="btn btn-sm btn-warning">-</button>
+                            <button type="submit" name="action" value="delete" class="btn btn-sm btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="text-end">
+            <a href="{{ url_for('buy_now') }}" class="btn btn-primary">Buy Now</a>
+        </div>
+        {% else %}
+        <p>Your cart is empty.</p>
+        {% endif %}
+
+        <a href="{{ url_for('buy_medicine', disease='All') }}" class="btn btn-secondary mt-3">Continue Shopping</a>
+
+    </div>
+</body>
+</html>

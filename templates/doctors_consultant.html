@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Consultation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        :root {
+            --coffee: #6F4E37;
+            --dusty-teal: #5E7A7D;
+            --muted-yellow: #E3B448;
+            --dark-coffee: #4B382A;
+            --deep-teal: #3A5A5F;
+        }
+        
+        body {
+            background-color: var(--coffee);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        
+        .navbar {
+            background-color: var(--dusty-teal) !important;
+            border-bottom: 3px solid var(--muted-yellow);
+            padding: 10px;
+        }
+        
+        .navbar-brand, .nav-link {
+            color: white !important;
+            transition: color 0.3s ease, transform 0.2s;
+        }
+        
+        .nav-link:hover {
+            color: var(--muted-yellow) !important;
+            transform: scale(1.05);
+        }
+        
+        .navbar-toggler {
+            border: 2px solid var(--muted-yellow) !important;
+        }
+        
+        .navbar-text {
+            color: white !important;
+        }
+        
+        .card {
+            background-color: var(--dusty-teal) !important;
+            border: none;
+            color: white;
+            border-radius: 12px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-title {
+            color: var(--muted-yellow) !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--muted-yellow) !important;
+            border: none;
+            color: var(--dark-coffee) !important;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark-coffee) !important;
+            color: var(--muted-yellow) !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">MedEase</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('buy_medicine', disease='All') }}">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Available Doctors</h2>
+        <div class="row">
+            {% for doctor in doctors %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Dr. {{ doctor[1] }}</h5>
+                        <p class="card-text"><strong>Specialization:</strong> {{ doctor[2] }}</p>
+                        <p class="card-text"><strong>Contact:</strong> {{ doctor[4] }}</p>
+                        <p class="card-text"><strong>Email:</strong> <a href="mailto:{{ doctor[3] }}">{{ doctor[3] }}</a></p>
+                        <p class="card-text"><strong>Availability:</strong> {{ doctor[5] }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
