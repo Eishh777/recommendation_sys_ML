@@ -12,9 +12,9 @@ import os
 from flask import jsonify
 
 app = Flask(__name__)
-app.secret_key = "b533a778180b087b72a27d7f186e8930"  # Change this to a secure key
+app.secret_key = "......"  # Change this to a secure key
 # Set up Google Gemini API
-API_KEY = "AIzaSyB7WocdSen88ywMhOd4nuBKy0sfgICVF6o"  # Replace with your actual Gemini API key
+API_KEY = "....."  # Replace with your actual Gemini API key
 genai.configure(api_key=API_KEY)
 
 # Use the correct model
